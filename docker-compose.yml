@@ -1,0 +1,42 @@
+# SOCAI Platform - Local Development Docker Compose
+# Module 1: Tenant & Customer Management Foundation
+
+version: '3.9'
+
+services:
+  db:
+    image: postgres:15-alpine
+    container_name: socai_postgres
+    environment:
+      POSTGRES_USER: socai
+      POSTGRES_PASSWORD: socai_dev_pass
+      POSTGRES_DB: socai_platform
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U socai -d socai_platform"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  api:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: socai_api
+    environment:
+      DATABASE_URL: postgresql://socai:socai_dev_pass@db:5432/socai_platform
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./backend:/app
+    depends_on:
+      db:
+        condition: service_healthy
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+    restart: unless-stopped
+
+volumes:
+  postgres_data:

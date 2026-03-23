@@ -1,0 +1,26 @@
+# SOCAI Platform - Backend Requirements
+# Module 1: Tenant & Customer Management Foundation
+
+# Web framework
+fastapi==0.111.0
+uvicorn[standard]==0.29.0
+
+# Database
+sqlalchemy==2.0.30
+alembic==1.13.1
+psycopg2-binary==2.9.9
+
+# Validation
+pydantic==2.7.1
+pydantic[email]==2.7.1
+
+# Environment
+python-dotenv==1.0.1
+
+# Testing
+pytest==8.2.0
+pytest-asyncio==0.23.6
+httpx==0.27.0
+
+# Utils
+python-multipart==0.0.9
